@@ -1,7 +1,2 @@
 rootProject.name = 'GradleAndroidAspectJPlugin'
 include 'android-aspectj-plugin'
-include 'SampleApp_01_Normal'
-include ':SampleApp_02_AspectInAndroidLib_App', ':SampleApp_05_AndroidAnnotations'
-include ':SampleApp_02_AspectInAndroidLib_lib'
-include ':SampleApp_03_Retrolambda'
-include ':SampleApp_04_MultiDex'
