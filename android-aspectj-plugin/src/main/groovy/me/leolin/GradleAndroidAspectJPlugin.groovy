@@ -56,22 +56,29 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
                         ]
 
                         MessageHandler handler = new MessageHandler(true);
+                        log.quiet("Start aspectJ work...")
+                        log.quiet("Full ajc build args: ${Arrays.toString(args as String[])}\n\n")
                         new Main().run(args, handler);
                         for (IMessage message : handler.getMessages(null, true)) {
                             switch (message.getKind()) {
                                 case IMessage.ABORT:
                                 case IMessage.ERROR:
                                 case IMessage.FAIL:
-                                    log.error message.message, message.thrown
+                                    if (message.thrown != null) {
+                                        log.error(message.message, message.thrown)
+                                    } else {
+                                        log.error(message.message)
+                                    }
                                     break;
                                 case IMessage.WARNING:
-                                    log.warn message.message, message.thrown
+                                    if (message.thrown != null) {
+                                        log.warn(message.message, message.thrown)
+                                    } else {
+                                        log.warn(message.message)
+                                    }
                                     break;
                                 case IMessage.INFO:
-                                    log.info message.message, message.thrown
-                                    break;
                                 case IMessage.DEBUG:
-                                    log.debug message.message, message.thrown
                                     break;
                             }
                         }
@@ -86,5 +93,4 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
             }
         }
     }
-
 }
