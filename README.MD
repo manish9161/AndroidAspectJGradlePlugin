@@ -1,4 +1,4 @@
-Gradle Android AspectJ Plugin
+Android AspectJ Gradle Plugin
 ===================================
 
 [AspectJ](http://www.eclipse.org/aspectj/doc/released/devguide/bytecode-concepts.html) plugin for Android.
@@ -63,6 +63,9 @@ To bench the impact of this task on your build, you may use the following comman
 ```
 gradle :{module}:compile{buildType}{flavor}AspectJ --profile
 ```
+
+## Tests
+Test repository is available [here](https://github.com/vincentbrison/AndroidAspectJGradlePlugin-Tests).
 
 # DEVELOP BY
 Fork and rewrite by [Vincent Brison](https://github.com/vincentbrison).
