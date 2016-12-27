@@ -84,18 +84,26 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
                 case IMessage.ABORT:
                 case IMessage.ERROR:
                 case IMessage.FAIL:
-                    logFile << "[error]" << message?.message << "${message?.thrown}\n\n";
+                    log("[error]", logFile, message);
                     break;
                 case IMessage.WARNING:
-                    logFile << "[warning]" << message?.message << "${message?.thrown}\n\n";
+                    log("[warning]", logFile, message);
                     break;
                 case IMessage.INFO:
                 case IMessage.DEBUG:
-                    logFile << "[info]" << message?.message << "${message?.thrown}\n\n";
+                    log("[info]", logFile, message);
                     break;
             }
         }
         println "AspectJ logs available in : $logFile.absolutePath";
+    }
+
+    private void log(String prefix, File logFile, IMessage message) {
+        logFile << prefix << message?.message;
+        if (message?.thrown != null) {
+            logFile << message.thrown;
+        }
+        logFile << '\n'
     }
 
     private prepareLogger(Project project) {
