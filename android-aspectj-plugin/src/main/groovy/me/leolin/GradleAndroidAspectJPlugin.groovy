@@ -58,14 +58,14 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
                 String[] args = [
                         "-showWeaveInfo",
                         "-1.5",
-                        "-inpath", javaCompile.destinationDir.toString(),
-                        "-aspectpath", javaCompile.classpath.asPath,
-                        "-d", javaCompile.destinationDir.toString(),
-                        "-classpath", javaCompile.classpath.asPath,
+                        "-inpath", variant.javaCompile.destinationDir.toString(),
+                        "-aspectpath", variant.javaCompile.classpath.asPath,
+                        "-d", variant.javaCompile.destinationDir.toString(),
+                        "-classpath", variant.javaCompile.classpath.asPath,
                         "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
                 ]
                 logFile << "Full ajc build args: ${Arrays.toString(args as String[])}\n\n";
-                MessageHandler handler = getMessageHandler();
+                def handler = getMessageHandler();
                 new Main().run(args, handler);
             }
         }
@@ -95,6 +95,7 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
                     break;
             }
         }
+        return handler;
     }
 
     private prepareLogger(Project project) {
