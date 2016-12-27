@@ -65,9 +65,9 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
                         "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
                 ]
                 logFile << "Full ajc build args: ${Arrays.toString(args as String[])}\n\n";
-                def handler = getMessageHandler();
+                MessageHandler handler = new MessageHandler(true);
                 new Main().run(args, handler);
-                println "AspectJ logs available in : $logFile.absolutePath"
+                logMessages(logFile, handler);
             }
         }
 
@@ -78,8 +78,7 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
         }
     }
 
-    private MessageHandler getMessageHandler(File logFile) {
-        MessageHandler handler = new MessageHandler(true);
+    private MessageHandler logMessages(File logFile, MessageHandler handler) {
         for (IMessage message : handler.getMessages(null, true)) {
             switch (message.getKind()) {
                 case IMessage.ABORT:
@@ -96,7 +95,7 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
                     break;
             }
         }
-        return handler;
+        println "AspectJ logs available in : $logFile.absolutePath";
     }
 
     private prepareLogger(Project project) {
