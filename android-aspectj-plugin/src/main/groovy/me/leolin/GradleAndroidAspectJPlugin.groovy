@@ -51,6 +51,7 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
     }
 
     private void doWeave(variant, Project project) {
+        def File logFile = prepareLogger(project);
         def buildTypeName = variant.name.capitalize()
         def aopTask = project.task("compile${buildTypeName}AspectJ") {
             doLast {
@@ -63,34 +64,9 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
                         "-classpath", javaCompile.classpath.asPath,
                         "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
                 ]
-
-                MessageHandler handler = new MessageHandler(true);
-                log.quiet("Start aspectJ work...")
-                log.quiet("Full ajc build args: ${Arrays.toString(args as String[])}\n\n")
+                logFile << "Full ajc build args: ${Arrays.toString(args as String[])}\n\n";
+                MessageHandler handler = getMessageHandler();
                 new Main().run(args, handler);
-                for (IMessage message : handler.getMessages(null, true)) {
-                    switch (message.getKind()) {
-                        case IMessage.ABORT:
-                        case IMessage.ERROR:
-                        case IMessage.FAIL:
-                            if (message.thrown != null) {
-                                log.error(message.message, message.thrown)
-                            } else {
-                                log.error(message.message)
-                            }
-                            break;
-                        case IMessage.WARNING:
-                            if (message.thrown != null) {
-                                log.warn(message.message, message.thrown)
-                            } else {
-                                log.warn(message.message)
-                            }
-                            break;
-                        case IMessage.INFO:
-                        case IMessage.DEBUG:
-                            break;
-                    }
-                }
             }
         }
 
@@ -99,5 +75,34 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
         } else {
             variant.javaCompile.finalizedBy(aopTask)
         }
+    }
+
+    private MessageHandler getMessageHandler(File logFile) {
+        MessageHandler handler = new MessageHandler(true);
+        for (IMessage message : handler.getMessages(null, true)) {
+            switch (message.getKind()) {
+                case IMessage.ABORT:
+                case IMessage.ERROR:
+                case IMessage.FAIL:
+                    logFile << "[error]" << message?.message << "${message?.thrown}\n\n";
+                    break;
+                case IMessage.WARNING:
+                    logFile << "[warning]" << message?.message << "${message?.thrown}\n\n";
+                    break;
+                case IMessage.INFO:
+                case IMessage.DEBUG:
+                    logFile << "[info]" << message?.message << "${message?.thrown}\n\n";
+                    break;
+            }
+        }
+    }
+
+    private prepareLogger(Project project) {
+        def logFilePath = project.buildDir.absolutePath + File.separator + 'ajc-details.log';
+        File lf = new File(logFilePath);
+        if (lf.exists()) {
+            lf.delete();
+        }
+        return lf;
     }
 }
