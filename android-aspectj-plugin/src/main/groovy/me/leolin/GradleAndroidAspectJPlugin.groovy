@@ -67,6 +67,7 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
                 logFile << "Full ajc build args: ${Arrays.toString(args as String[])}\n\n";
                 def handler = getMessageHandler();
                 new Main().run(args, handler);
+                println "AspectJ logs available in : $logFile.absolutePath"
             }
         }
 
