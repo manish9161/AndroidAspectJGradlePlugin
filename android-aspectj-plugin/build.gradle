@@ -1,13 +1,4 @@
 apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: 'nexus'
-apply plugin: 'com.jfrog.bintray'
-
-def siteUrl = 'https://github.com/leolin310148/GradleAndroidAspectJPlugin'      // Homepage URL of the library
-def gitUrl = 'https://github.com/leolin310148/GradleAndroidAspectJPlugin.git'   // Git repository URL
-
-version = "1.0.7"
-group = "me.leolin"
 
 dependencies {
     compile gradleApi()
@@ -15,66 +6,4 @@ dependencies {
     compile 'com.android.tools.build:gradle:2.2.3'
     compile "org.aspectj:aspectjtools:${aspectjVersion}"
     compile "org.aspectj:aspectjrt:${aspectjVersion}"
-}
-
-install {
-    repositories.mavenInstaller {
-        pom.artifactId = 'android-aspectJ-plugin'
-    }
-}
-
-uploadArchives {
-    repositories.mavenDeployer {
-        pom.artifactId = 'android-aspectJ-plugin'
-    }
-}
-
-modifyPom {
-    project {
-        // Add your description here
-        name 'Gradle plugin for android with aspectJ'
-        url siteUrl
-
-        // Set your license
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            }
-        }
-        developers {
-            developer {
-                id 'leolin310148'
-                name 'Leo Lin'
-                email 'leolin310148@gmail.com'
-            }
-        }
-        scm {
-            connection gitUrl
-            developerConnection gitUrl
-            url siteUrl
-        }
-    }
-}
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-
-    pkg {
-        repo = 'maven'
-        name = 'gradle-android-aspectJ-plugin'
-        desc = 'Gradle plugin for android with aspectJ'
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ['Apache-2.0']
-        labels = ['gradle', 'android', 'aspectJ']
-        publicDownloadNumbers = true
-        publish = true
-    }
 }

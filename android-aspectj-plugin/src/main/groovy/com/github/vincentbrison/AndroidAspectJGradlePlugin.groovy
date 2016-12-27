@@ -1,4 +1,4 @@
-package me.leolin
+package com.github.vincentbrison
 
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.LibraryPlugin
@@ -7,14 +7,12 @@ import org.aspectj.bridge.MessageHandler
 import org.aspectj.tools.ajc.Main
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-/**
- * @author leolin
- */
-class GradleAndroidAspectJPlugin implements Plugin<Project> {
+
+class AndroidAspectJGradlePlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        def extension = project.extensions.create('aspectj', GradleAndroidAspectJPluginExtension);
+        def extension = project.extensions.create('aspectj', AndroidAspectJGradlePluginExtension);
         def variants = getVariants(project)
         ensureAspectJrtDependencyIsSatisfied(project)
         project.afterEvaluate {
@@ -50,7 +48,7 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
         }
     }
 
-    private void doWeave(variant, Project project, GradleAndroidAspectJPluginExtension extension) {
+    private void doWeave(variant, Project project, AndroidAspectJGradlePluginExtension extension) {
         def File logFile = prepareLogger(project);
         def buildTypeName = variant.name.capitalize()
         def aopTask = project.task("compile${buildTypeName}AspectJ") {
