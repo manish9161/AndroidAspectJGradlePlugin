@@ -14,11 +14,12 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        def extension = project.extensions.create('aspectj', GradleAndroidAspectJPluginExtension);
         def variants = getVariants(project)
         ensureAspectJrtDependencyIsSatisfied(project)
         project.afterEvaluate {
             variants.all { variant ->
-                doWeave(variant, project)
+                doWeave(variant, project, extension);
             }
         }
     }
@@ -49,23 +50,25 @@ class GradleAndroidAspectJPlugin implements Plugin<Project> {
         }
     }
 
-    private void doWeave(variant, Project project) {
+    private void doWeave(variant, Project project, GradleAndroidAspectJPluginExtension extension) {
         def File logFile = prepareLogger(project);
         def buildTypeName = variant.name.capitalize()
         def aopTask = project.task("compile${buildTypeName}AspectJ") {
             doLast {
-                String[] args = [
+                def args = [
                         "-showWeaveInfo",
                         "-1.5",
                         "-inpath", variant.javaCompile.destinationDir.toString(),
-                        "-aspectpath", variant.javaCompile.classpath.asPath,
                         "-d", variant.javaCompile.destinationDir.toString(),
                         "-classpath", variant.javaCompile.classpath.asPath,
                         "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)
                 ]
+                if (extension.includeAspectPath) {
+                    args << "-aspectpath" << variant.javaCompile.classpath.asPath;
+                }
                 logFile << "Full ajc build args: ${Arrays.toString(args as String[])}\n\n";
                 MessageHandler handler = new MessageHandler(true);
-                new Main().run(args, handler);
+                new Main().run(args as String[], handler);
                 logMessages(logFile, handler);
             }
         }
