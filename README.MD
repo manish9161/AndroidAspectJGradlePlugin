@@ -28,7 +28,7 @@ apply plugin: 'com.github.vincentbrison.android-aspectj-plugin'
 ## Extension
 ```
 aspectj {
-    include includeAspectPath = false; (true by default, see http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html)
+    includeAspectPath = false; (true by default, see http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html)
 }
 ```
 
@@ -68,8 +68,8 @@ gradle :{module}:compile{buildType}{flavor}AspectJ --profile
 Test repository is available [here](https://github.com/vincentbrison/AndroidAspectJGradlePlugin-Tests).
 
 # DEVELOP BY
-Fork and rewrite by [Vincent Brison](https://github.com/vincentbrison).
 Originally developed by [Leo Lin](https://github.com/leolin310148).
+Forked and rewritten by [Vincent Brison](https://github.com/vincentbrison).
 
 # LICENSE
 ```
