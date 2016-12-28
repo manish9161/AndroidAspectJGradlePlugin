@@ -17,7 +17,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath 'com.github.vincentbrison:AndroidAspectJGradlePlugin:1.0.1'
+        classpath 'com.github.vincentbrison:AndroidAspectJGradlePlugin:1.0.2'
     }
 }
 
@@ -47,7 +47,7 @@ buildscript {
     dependencies {
         ...
         classpath 'me.tatarka:gradle-retrolambda:3.4.0'
-        classpath 'com.github.vincentbrison:AndroidAspectJGradlePlugin:1.0.1'
+        classpath 'com.github.vincentbrison:AndroidAspectJGradlePlugin:1.0.2'
     }
 }
 
