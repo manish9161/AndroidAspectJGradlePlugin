@@ -17,7 +17,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath 'com.github.vincentbrison:AndroidAspectJGradlePlugin:1.0.0'
+        classpath 'com.github.vincentbrison:AndroidAspectJGradlePlugin:1.0.1'
     }
 }
 
@@ -46,13 +46,13 @@ buildscript {
     }
     dependencies {
         ...
-        classpath 'me.tatarka:gradle-retrolambda:3.0.1'
-        classpath 'com.github.vincentbrison:AndroidAspectJGradlePlugin:1.0.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
+        classpath 'com.github.vincentbrison:AndroidAspectJGradlePlugin:1.0.1'
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'me.tatarka.retrolambda' // Apply retrolambda before aspectj plugin
 apply plugin: 'com.github.vincentbrison.android-aspectj-plugin'
 ```
 

@@ -7,6 +7,7 @@ import org.aspectj.bridge.MessageHandler
 import org.aspectj.tools.ajc.Main
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 
 class AndroidAspectJGradlePlugin implements Plugin<Project> {
 
@@ -72,10 +73,27 @@ class AndroidAspectJGradlePlugin implements Plugin<Project> {
         }
 
         if (hasRetroLambda(project)) {
-            project.tasks["compileRetrolambda$buildTypeName"].finalizedBy(aopTask)
+            Task retroLambdaTask = findRetroLambdaTask(project, buildTypeName)
+            retroLambdaTask.finalizedBy(aopTask)
         } else {
             variant.javaCompile.finalizedBy(aopTask)
         }
+    }
+
+    private Task findRetroLambdaTask(Project project, String buildTypeName) {
+        def Task retroLambdaTask
+        retroLambdaTask = project.tasks["compileRetrolambda"]
+        if (retroLambdaTask != null) {
+            return retroLambdaTask;
+        }
+        retroLambdaTask = project.tasks["compileRetrolambda$buildTypeName"]
+        if (retroLambdaTask != null) {
+            return retroLambdaTask;
+        }
+        throw new IllegalStateException(
+            "No retrolambda task found. The version of " +
+            "retrolambda you are using may not be compatible with this version of aspectj."
+        )
     }
 
     private MessageHandler logMessages(File logFile, MessageHandler handler) {
